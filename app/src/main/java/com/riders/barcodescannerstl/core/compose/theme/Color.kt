@@ -1,4 +1,4 @@
-package com.riders.barcodescannerstl.ui.theme
+package com.riders.barcodescannerstl.core.compose.theme
 
 import androidx.compose.ui.graphics.Color
 

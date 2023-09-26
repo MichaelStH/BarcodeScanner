@@ -1,4 +1,4 @@
-package com.riders.barcodescannerstl.ui.theme
+package com.riders.barcodescannerstl.core.compose.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

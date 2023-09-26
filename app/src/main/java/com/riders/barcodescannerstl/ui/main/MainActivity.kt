@@ -1,4 +1,4 @@
-package com.riders.barcodescannerstl
+package com.riders.barcodescannerstl.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,9 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.riders.barcodescannerstl.ui.theme.BarcodeScannerSTLTheme
+import com.riders.barcodescannerstl.core.compose.theme.BarcodeScannerSTLTheme
+import com.riders.barcodescannerstl.ui.base.BaseComposeActivity
 
-class MainActivity : ComponentActivity() {
+class MainActivity : BaseComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
