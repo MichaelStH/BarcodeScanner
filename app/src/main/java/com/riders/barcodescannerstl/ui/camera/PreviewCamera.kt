@@ -11,7 +11,6 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -48,7 +47,7 @@ suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutin
 @SuppressLint("OpaqueUnitKey")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CameraView(viewModel: MainActivityViewModel) {
+fun CameraView(modifier: Modifier = Modifier, viewModel: MainActivityViewModel) {
     var barcodeBoxView: BarcodeBoxView?
     val cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -61,7 +60,7 @@ fun CameraView(viewModel: MainActivityViewModel) {
             ) {*/
             AndroidView(
 //                modifier = Modifier.size(width = 250.dp, height = 250.dp),
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.then(modifier),
                 factory = { context ->
                     barcodeBoxView = BarcodeBoxView(context).apply {
                         this.layoutParams = ViewGroup.LayoutParams(
@@ -160,6 +159,6 @@ fun CameraView(viewModel: MainActivityViewModel) {
 @Composable
 private fun PreviewCameraView() {
     BarcodeScannerSTLTheme {
-        CameraView(MainActivityViewModel())
+        CameraView(Modifier, MainActivityViewModel())
     }
 }

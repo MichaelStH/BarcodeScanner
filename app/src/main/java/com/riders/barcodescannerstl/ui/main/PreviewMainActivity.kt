@@ -1,6 +1,9 @@
 package com.riders.barcodescannerstl.ui.main
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,8 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.riders.barcodescannerstl.core.compose.theme.BarcodeScannerSTLTheme
+import com.riders.barcodescannerstl.core.compose.theme.Purple80
+import com.riders.barcodescannerstl.core.compose.theme.PurpleGrey40
 import com.riders.barcodescannerstl.ui.camera.CameraView
 import com.riders.thelab.core.ui.compose.annotation.DevicePreviews
 import timber.log.Timber
@@ -42,12 +50,32 @@ fun CameraContent(viewModel: MainActivityViewModel) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(this.maxHeight / 2)
+                    .height(this.maxHeight / 1.25f)
                     .align(Alignment.TopCenter)
                     .padding(16.dp), shape = RoundedCornerShape(35.dp)
             ) {
-                CameraView(viewModel)
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CameraView(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .align(Alignment.Center),
+                        viewModel
+                    )
+                }
             }
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
+                    .background(if (!isSystemInDarkTheme()) Purple80 else PurpleGrey40),
+                text = viewModel.dataFound,
+                style = TextStyle(
+                    textAlign = TextAlign.Center,
+                    color = if (!isSystemInDarkTheme()) Color.Black else Color.White
+                )
+            )
         }
     }
 }
@@ -112,6 +140,6 @@ private fun PreviewCameraContent() {
 @Composable
 private fun PreviewMainContent() {
     BarcodeScannerSTLTheme {
-        MainContent(MainActivityViewModel())
+        MainContent(MainActivityViewModel().apply { updateShowCamera(true) })
     }
 }
