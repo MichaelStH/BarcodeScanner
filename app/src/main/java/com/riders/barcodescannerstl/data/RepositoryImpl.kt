@@ -8,6 +8,7 @@ import io.github.kotools.csv.reader.csvReader
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.StringTokenizer
 import javax.inject.Inject
 
 
@@ -39,9 +40,25 @@ class RepositoryImpl @Inject constructor(dbImpl: DbImpl) : IRepository {
         val reader = BufferedReader(inputStreamAsset)
         reader.readLine()
         var line: String?
+        var st: StringTokenizer? = null
 
         while (reader.readLine().also { line = it } != null) {
             Timber.d("line: $line")
+            st = StringTokenizer(line, ";")
+            val order = Order(
+                date = st.nextToken(),
+                number = st.nextToken(),
+                buyerName = st.nextToken(),
+                state = st.nextToken(),
+                price = st.nextToken(),
+                description = st.nextToken(),
+                quantity = st.nextToken().toInt(),
+                unitPrice = st.nextToken(),
+                salesCommission = st.nextToken(),
+                totalPrice = st.nextToken()
+            )
+
+            orderList.add(order)
         }
 
         inputStreamAsset.close()
@@ -61,7 +78,7 @@ class RepositoryImpl @Inject constructor(dbImpl: DbImpl) : IRepository {
 
     override fun insertAll(orders: List<OrderModel>): List<Long> = mDbImpl.insertAll(orders)
 
-    override fun getOrder(orderNumber: String): OrderModel = mDbImpl.getOrder(orderNumber)
+    override fun getOrder(orderNumber: String): OrderModel? = mDbImpl.getOrder(orderNumber)
 
     override fun getOrders(): List<OrderModel> = mDbImpl.getOrders()
 

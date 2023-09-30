@@ -97,7 +97,7 @@ fun CameraView(modifier: Modifier = Modifier, viewModel: MainActivityViewModel) 
                                         cameraExecutor,
                                         BarcodeImageAnalyzer(
                                             context,
-                                            barcodeBoxView!!,
+                                            //barcodeBoxView!!,
                                             previewView.width.toFloat(),
                                             previewView.height.toFloat()
                                         ) { barcodeScanned ->

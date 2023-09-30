@@ -13,7 +13,7 @@ class DbImpl @Inject constructor(
 
     override fun insertAll(orders: List<OrderModel>): List<Long> = mOrderDao.insertAll(orders)
 
-    override fun getOrder(orderNumber: String): OrderModel = mOrderDao.getOrder(orderNumber)
+    override fun getOrder(orderNumber: String): OrderModel? = mOrderDao.getOrder(orderNumber)
 
     override fun getOrders(): List<OrderModel> = mOrderDao.getOrders()
 

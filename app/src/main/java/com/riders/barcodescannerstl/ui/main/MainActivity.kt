@@ -98,6 +98,15 @@ class MainActivity : BaseComposeActivity() {
         checkPermission()
     }
 
+    override fun onPause() {
+        super.onPause()
+        Timber.e("onPause()")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume()")
+    }
     override fun backPressed() {
         Timber.e("override | backPressed()")
         finish()

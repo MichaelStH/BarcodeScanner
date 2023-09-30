@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.riders.barcodescannerstl.data.IRepository
 import com.riders.barcodescannerstl.data.local.model.MainUiState
+import com.riders.barcodescannerstl.data.remote.dto.toModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -98,6 +99,21 @@ class MainActivityViewModel @Inject constructor(
             updateMessage("CoroutineExceptionHandler | ${throwable.message}")
         }
 
+    ///////////////////////////////
+    //
+    // OVERRIDE
+    //
+    ///////////////////////////////
+    override fun onCleared() {
+        super.onCleared()
+        Timber.e("onCleared()")
+    }
+
+    ///////////////////////////////
+    //
+    // IMPLEMENTS
+    //
+    ///////////////////////////////
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
         Timber.d("onStart()")
@@ -107,13 +123,25 @@ class MainActivityViewModel @Inject constructor(
 
         viewModelScope.launch(IO + SupervisorJob() + coroutineExceptionHandler) {
             delay(500L)
-            repository.getOrderFromAssetsToJson(context = context)?.let {
-                if (it.isEmpty()) {
+            repository.getOrderFromAssetsToJson(context = context)?.let { orderList ->
+                if (orderList.isEmpty()) {
                     updateUiState(MainUiState.SetupDataFailed(exceptionMessage = "List is empty"))
                     updateMessage("Error while setting up data")
                 } else {
+                    updateMessage("Configuring data...")
+                    delay(1000L)
+
+                    if (repository.getOrders().isEmpty()) {
+                        Timber.e("No records. Save in database")
+                        repository.insertAll(orderList.map { order -> order.toModel() })
+                        delay(750L)
+                    } else {
+                        Timber.d("Data found in database")
+                    }
+
                     updateUiState(MainUiState.DataSet())
                     updateMessage("We're all set. Show camera")
+                    delay(500L)
                 }
             } ?: run {
                 Timber.e("Error while fetching data from assets ? | Returned null")

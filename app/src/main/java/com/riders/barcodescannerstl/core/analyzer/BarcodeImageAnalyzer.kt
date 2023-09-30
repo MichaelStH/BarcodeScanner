@@ -17,7 +17,7 @@ import timber.log.Timber
 
 class BarcodeImageAnalyzer(
     private val context: Context,
-    private val barcodeBoxView: BarcodeBoxView,
+    //private val barcodeBoxView: BarcodeBoxView,
     private val previewViewWidth: Float,
     private val previewViewHeight: Float,
     private val callback: (String) -> Unit
@@ -72,11 +72,7 @@ class BarcodeImageAnalyzer(
 
                         // Update bounding rect
                         barcode.boundingBox?.let { rect ->
-                            barcodeBoxView.setRect(
-                                adjustBoundingRect(
-                                    rect
-                                )
-                            )
+                            // barcodeBoxView.setRect(adjustBoundingRect(rect))
                         }
 
                         barcode.rawValue?.let {
@@ -85,11 +81,12 @@ class BarcodeImageAnalyzer(
                     }
                 } else {
                     // Remove bounding rect
-                    barcodeBoxView.setRect(RectF())
+                    // barcodeBoxView.setRect(RectF())
                 }
             }
             .addOnFailureListener {
-                Timber.e("Exception caught with class: ${it::class.java.simpleName}, and message: ${it.message}")
+                // Timber.e("Exception caught with class: ${it::class.java.simpleName}, and message: ${it.message}")
+                // barcodeBoxView.setRect(RectF())
             }
 
         imageProxy.close()

@@ -4,15 +4,15 @@ import com.riders.barcodescannerstl.data.local.model.OrderModel
 
 data class Order(
     val date: String,
-    val number: Int,
+    val number: String,
     val buyerName: String,
     val state: String,
     val price: String,
     val description: String,
     val quantity: Int,
-    val unitPrice: Double,
-    val salesCommission: Double,
-    val totalPrice: Double
+    val unitPrice: String,
+    val salesCommission: String,
+    val totalPrice: String
 )
 
 fun Order.toModel(): OrderModel = OrderModel(
