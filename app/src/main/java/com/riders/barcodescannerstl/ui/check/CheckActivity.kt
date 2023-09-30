@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.riders.barcodescannerstl.ui.base.BaseComposeActivity
-import com.riders.barcodescannerstl.ui.main.MainActivityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
+@AndroidEntryPoint
 class CheckActivity : BaseComposeActivity() {
-    private val mViewModel: MainActivityViewModel by viewModels()
+
+    private val mViewModel: CheckViewModel by viewModels()
 
 
     ///////////////////////////////
@@ -20,6 +22,18 @@ class CheckActivity : BaseComposeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("onCreate()")
+
+        this.intent.extras?.let { mViewModel.getBundle(it) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Timber.e("onPause()")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Timber.d("onResume()")
     }
 
     override fun backPressed() {
