@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
     kotlin("kapt")
 }
 
@@ -43,7 +45,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
     packaging {
         resources {
@@ -53,6 +55,10 @@ android {
 }
 
 dependencies {
+
+    implementation(platform(libs.kotlin.bom))
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 
     /////////////////////////////////////////
     // General Dependencies
@@ -101,8 +107,25 @@ dependencies {
     implementation(libs.androidx.lifecycle.service)
     implementation(libs.androidx.lifecycle.process)
 
+    // Room
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+
+    /* Hilt - We are going to use hilt.android which includes
+     * support for Activity and fragment injection so we need to include
+     * the following dependencies */
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.ext.work)
+    ksp(libs.hilt.ext.compiler)
+    androidTestImplementation(libs.hilt.android.testing)
+
     // Google ML Kit
     implementation(libs.google.barcode.scanning)
+
+    // Kotools
+    implementation(libs.kotools.csv)
 
     // Timber
     implementation(libs.timber)
@@ -117,4 +140,14 @@ dependencies {
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+}
+
+kapt {
+    correctErrorTypes = true
+}
+
+hilt {
+    enableAggregatingTask = true
+    enableTransformForLocalTests = true
+    enableExperimentalClasspathAggregation = true
 }

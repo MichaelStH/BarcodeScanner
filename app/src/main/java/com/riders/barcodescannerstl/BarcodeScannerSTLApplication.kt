@@ -1,10 +1,11 @@
 package com.riders.barcodescannerstl
 
 
-import com.riders.barcodescannerstl.BuildConfig
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class BarcodeScannerSTLApplication : Application() {
     override fun onCreate() {
         super.onCreate()
