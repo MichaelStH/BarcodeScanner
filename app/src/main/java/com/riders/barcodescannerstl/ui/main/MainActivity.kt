@@ -2,6 +2,7 @@ package com.riders.barcodescannerstl.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -23,11 +24,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.riders.barcodescannerstl.core.compose.theme.BarcodeScannerSTLTheme
 import com.riders.barcodescannerstl.core.utils.CompatibilityManager
 import com.riders.barcodescannerstl.ui.base.BaseComposeActivity
+import com.riders.barcodescannerstl.ui.check.CheckActivity
+import com.riders.barcodescannerstl.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@AndroidEntryPoint
 class MainActivity : BaseComposeActivity() {
 
     private val mViewModel: MainActivityViewModel by viewModels()
@@ -35,6 +40,7 @@ class MainActivity : BaseComposeActivity() {
 
     private var mPermissionLauncher: ActivityResultLauncher<String>? = null
 
+    /*https://www.bizouk.com/bo/events-orders/orders-list-export?event=70464*/
 
     ///////////////////////////////
     //
@@ -196,4 +202,19 @@ class MainActivity : BaseComposeActivity() {
 
         }, ContextCompat.getMainExecutor(this))
     }
+
+    fun launchCheckActivity(data: String) =
+        Intent(this, CheckActivity::class.java)
+            .apply {
+                this.putExtra(Constants.EXTRA_BARCODE_DATA, data)
+            }
+            .runCatching {
+                startActivity(this)
+            }
+            .onFailure {
+                Timber.e("runCatching | onFailure | Exception caught with message: ${it.message}")
+            }
+            .onSuccess {
+                Timber.d("runCatching | onSuccess")
+            }
 }

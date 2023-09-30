@@ -3,6 +3,7 @@ package com.riders.barcodescannerstl.ui.main
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -18,15 +19,20 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.riders.barcodescannerstl.core.compose.theme.BarcodeScannerSTLTheme
 import com.riders.barcodescannerstl.core.compose.theme.Purple80
 import com.riders.barcodescannerstl.core.compose.theme.PurpleGrey40
+import com.riders.barcodescannerstl.data.local.model.MainUiState
 import com.riders.barcodescannerstl.ui.camera.CameraView
 import com.riders.thelab.core.ui.compose.annotation.DevicePreviews
 import timber.log.Timber
@@ -83,6 +89,12 @@ fun CameraContent(viewModel: MainActivityViewModel) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainContent(viewModel: MainActivityViewModel) {
+
+    val uiState by viewModel.mainUiState.collectAsStateWithLifecycle()
+
+    // Register lifecycle events
+    viewModel.observeLifecycleEvents(LocalLifecycleOwner.current.lifecycle)
+
     BarcodeScannerSTLTheme {
         Scaffold(
             topBar = {
@@ -96,12 +108,34 @@ fun MainContent(viewModel: MainActivityViewModel) {
             ) {
                 AnimatedContent(
                     targetState = viewModel.showCamera,
-                    label = "show camera content transition"
+                    label = "main content transition"
                 ) { targetState ->
                     if (!targetState) {
                         NoCaptureAvailable()
                     } else {
-                        CameraContent(viewModel)
+                        AnimatedContent(
+                            targetState = uiState,
+                            label = "show camera content transition"
+                        ) { uiTargetState ->
+                            when (uiTargetState) {
+                                is MainUiState.DataSet -> {
+                                    CameraContent(viewModel)
+                                }
+
+                                else -> {
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(16.dp),
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        Text(text = viewModel.message)
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -131,15 +165,17 @@ private fun PreviewNoCaptureAvailable() {
 @DevicePreviews
 @Composable
 private fun PreviewCameraContent() {
+    val viewModel: MainActivityViewModel = hiltViewModel()
     BarcodeScannerSTLTheme {
-        CameraContent(MainActivityViewModel())
+        CameraContent(viewModel)
     }
 }
 
 @DevicePreviews
 @Composable
 private fun PreviewMainContent() {
+    val viewModel: MainActivityViewModel = hiltViewModel()
     BarcodeScannerSTLTheme {
-        MainContent(MainActivityViewModel().apply { updateShowCamera(true) })
+        MainContent(viewModel)
     }
 }

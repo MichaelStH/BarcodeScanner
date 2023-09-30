@@ -17,8 +17,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.riders.barcodescannerstl.core.analyzer.BarcodeImageAnalyzer
 import com.riders.barcodescannerstl.core.compose.theme.BarcodeScannerSTLTheme
+import com.riders.barcodescannerstl.core.utils.findActivity
+import com.riders.barcodescannerstl.ui.main.MainActivity
 import com.riders.barcodescannerstl.ui.main.MainActivityViewModel
 import com.riders.thelab.core.ui.compose.annotation.DevicePreviews
 import timber.log.Timber
@@ -107,7 +110,10 @@ fun CameraView(modifier: Modifier = Modifier, viewModel: MainActivityViewModel) 
 
                                             Timber.d("Barcode found with value: $barcodeScanned")
 
-                                            viewModel.updateDataFound(barcodeScanned)
+                                            // viewModel.updateDataFound(barcodeScanned)
+                                            (context.findActivity() as MainActivity).launchCheckActivity(
+                                                barcodeScanned
+                                            )
                                         })
                                 }
 
@@ -158,7 +164,8 @@ fun CameraView(modifier: Modifier = Modifier, viewModel: MainActivityViewModel) 
 @DevicePreviews
 @Composable
 private fun PreviewCameraView() {
+    val viewModel: MainActivityViewModel = hiltViewModel()
     BarcodeScannerSTLTheme {
-        CameraView(Modifier, MainActivityViewModel())
+        CameraView(Modifier, viewModel)
     }
 }
