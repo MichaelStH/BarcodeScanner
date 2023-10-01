@@ -17,10 +17,13 @@ data class OrderModel(
     val quantity: Int,
     val unitPrice: String,
     val salesCommission: String,
-    val totalPrice: String
+    val totalPrice: String,
+    val checked: OrderState = OrderState.NONE
 ) : Serializable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var _id: Long = 0L
+
+    fun isChecked(): Boolean = this.checked == OrderState.CHECKED
 }

@@ -8,4 +8,6 @@ interface IDb {
     fun getOrder(orderNumber: String): OrderModel?
     fun getOrders(): List<OrderModel>
     fun deleteAll()
+
+    fun tagAsChecked(orderId: Long)
 }

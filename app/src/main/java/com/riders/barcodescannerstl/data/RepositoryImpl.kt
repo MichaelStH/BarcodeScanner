@@ -83,4 +83,5 @@ class RepositoryImpl @Inject constructor(dbImpl: DbImpl) : IRepository {
     override fun getOrders(): List<OrderModel> = mDbImpl.getOrders()
 
     override fun deleteAll() = mDbImpl.deleteAll()
+    override fun tagAsChecked(orderId: Long) = mDbImpl.tagAsChecked(orderId)
 }

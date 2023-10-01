@@ -18,4 +18,5 @@ class DbImpl @Inject constructor(
     override fun getOrders(): List<OrderModel> = mOrderDao.getOrders()
 
     override fun deleteAll() = mOrderDao.deleteAll()
+    override fun tagAsChecked(orderId: Long) = mOrderDao.tagAsChecked(orderId)
 }

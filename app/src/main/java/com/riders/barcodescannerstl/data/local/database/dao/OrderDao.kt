@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.riders.barcodescannerstl.data.local.model.OrderModel
+import com.riders.barcodescannerstl.data.local.model.OrderState
 
 @Dao
 interface OrderDao {
@@ -24,4 +25,8 @@ interface OrderDao {
 
     @Query("DELETE FROM `order`")
     fun deleteAll()
+
+
+    @Query("UPDATE `order` SET checked = :checkedState WHERE id =:orderId")
+    fun tagAsChecked(orderId: Long, checkedState : OrderState = OrderState.CHECKED)
 }
