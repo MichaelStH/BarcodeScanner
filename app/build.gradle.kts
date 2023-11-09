@@ -148,6 +148,5 @@ kapt {
 
 hilt {
     enableAggregatingTask = true
-    enableTransformForLocalTests = true
     enableExperimentalClasspathAggregation = true
 }
